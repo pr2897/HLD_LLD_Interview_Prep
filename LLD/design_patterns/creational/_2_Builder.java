@@ -43,7 +43,7 @@ class User {
     }
 }
 
-public class Builder {
+public class _2_Builder {
     public static void main(String[] args) {
         User me = new User.Builder("Piyush")
         .withAddress("india")

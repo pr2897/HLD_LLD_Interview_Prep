@@ -1,5 +1,5 @@
 class ConfigurationManager {
-    private static ConfigurationManager instance;
+    private static volatile ConfigurationManager instance;
 
     private ConfigurationManager() {}
 
@@ -17,7 +17,7 @@ class ConfigurationManager {
     }
 }
 
-public class Singleton {
+public class _1_Singleton {
     public static void main(String[] args) {
         
         for(int i=0;i<100;i++) {
