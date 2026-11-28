@@ -1,0 +1,174 @@
+
+abstract class Pizza {
+    private final String a;
+    private final String b;
+
+    protected Pizza(Builder<?> builder) {
+        this.a = builder.a;
+        this.b = builder.b;
+    }
+
+    @Override
+    public String toString() {
+        return "Pizza [a=" + a + ", b=" + b + "]";
+    }
+
+    // Recursive generic Builder
+    abstract static class Builder<T extends Builder<T>> {
+
+        private final String a;
+        private String b;
+
+        protected Builder(String a) {
+            this.a = a;
+        }
+
+        protected abstract T self();
+
+        public T withB(String b) {
+            this.b = b;
+            return self();
+        }
+
+        public abstract Pizza build();
+    }
+}
+
+// Normal Pizza
+class NormalPizza extends Pizza {
+
+    private NormalPizza(Builder builder) {
+        super(builder);
+    }
+
+    public static class Builder extends Pizza.Builder<Builder> {
+
+        public Builder(String a) {
+            super(a);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        public NormalPizza build() {
+            return new NormalPizza(this);
+        }
+    }
+}
+
+// New York Pizza
+class NYPizza extends Pizza {
+
+    private final String c;
+    private final String d;
+
+    private NYPizza(Builder builder) {
+        super(builder);
+        this.c = builder.c;
+        this.d = builder.d;
+    }
+
+    @Override
+    public String toString() {
+        return "NYPizza [" + super.toString()
+                + ", c=" + c + ", d=" + d + "]";
+    }
+
+    public static class Builder extends Pizza.Builder<Builder> {
+
+        private final String c;
+        private String d;
+
+        public Builder(String a, String c) {
+            super(a);
+            this.c = c;
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        public Builder withD(String d) {
+            this.d = d;
+            return this;
+        }
+
+        @Override
+        public NYPizza build() {
+            return new NYPizza(this);
+        }
+    }
+}
+
+// Calzone
+class Calzone extends Pizza {
+
+    private final String c;
+    private final String d;
+
+    private Calzone(Builder builder) {
+        super(builder);
+        this.c = builder.c;
+        this.d = builder.d;
+    }
+
+    @Override
+    public String toString() {
+        return "Calzone [" + super.toString()
+                + ", c=" + c + ", d=" + d + "]";
+    }
+
+    public static class Builder extends Pizza.Builder<Builder> {
+
+        private final String c;
+        private String d;
+
+        public Builder(String a, String c) {
+            super(a);
+            this.c = c;
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        public Builder withD(String d) {
+            this.d = d;
+            return this;
+        }
+
+        @Override
+        public Calzone build() {
+            return new Calzone(this);
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        NormalPizza normal = new NormalPizza.Builder("a")
+                .withB("b")
+                .build();
+
+        NYPizza ny = new NYPizza.Builder("a", "c")
+                .withD("d")
+                .withB("b")
+                .build();
+
+        Calzone calzone = new Calzone.Builder("a", "c")
+                .withB("b")
+                .withD("d")
+                .build();
+
+        System.out.println(normal);
+        System.out.println(ny);
+        System.out.println(calzone);
+    }
+}
